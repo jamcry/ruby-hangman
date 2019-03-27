@@ -1,4 +1,18 @@
+require "yaml"
 dict_filename = "./dict.txt"
+save_filename = "./saved_data.yml"
+def save_game
+    File.open(save_filename, "w+") do |f|
+        f.write(sth.to_yaml)
+    end
+end
+
+def load_game
+    File.open(save_filename, "r+") do |f|
+        sth_loaded = YAML.load_file(save_filename)
+    end
+end
+
 def load_words(dict_filename)
     # These function can be simplified (may even be to single line)
     dictionary = File.open(dict_filename) {|f| f.readlines}
@@ -56,7 +70,7 @@ num_of_tries = 0
 dict = load_words(dict_filename)
 word = select_random(dict)
 secret_word_array = create_secret_word(word)
-puts word
+
 while num_of_guesses > 0
     guess = get_user_guess
     if check_user_guess(word, secret_word_array, guess, num_of_guesses)
