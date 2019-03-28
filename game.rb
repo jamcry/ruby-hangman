@@ -1,6 +1,7 @@
 require "yaml"
 dict_filename = "./dict.txt"
 save_filename = "./saved_data.yml"
+
 def save_game(save_filename, data)
     File.open(save_filename, "w+") do |f|
         f.write(data.to_yaml)
@@ -68,28 +69,28 @@ def end_game(word, secret_word_array)
     end
 end
 
+num_of_guesses = 12
+num_of_tries = 0
+dict = load_words(dict_filename)
+word = select_random(dict)
+secret_word_array = create_secret_word(word)
+
 if File.exists? (save_filename)
     print " Do you want to load the saved game? "
     choice = gets.chomp.downcase
     if choice == "y"
         db = {}
         File.open(save_filename) { db = YAML.load_file(save_filename) }
+
         num_of_guesses = db[:num_of_guesses]
         num_of_tries = db[:num_of_tries]
         word = db[:word]
         secret_word_array = db[:secret_word_array]
         display_secret_word(secret_word_array)
-    else
     end
-else
-    num_of_guesses = 12
-    num_of_tries = 0
-    dict = load_words(dict_filename)
-    word = select_random(dict)
-    secret_word_array = create_secret_word(word)
 end
 
-while num_of_guesses > 0
+while (num_of_guesses > 0)
     guess = get_user_guess
     if guess == "SS"
         db = {num_of_guesses: num_of_guesses, num_of_tries: num_of_tries, word: word, secret_word_array: secret_word_array}
